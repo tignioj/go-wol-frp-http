@@ -8,11 +8,17 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 )
 func main()  {
 	//2C:F0:5D:54:34:D0
+	args := os.Args
 	var port = "9999"
+	if len(args) >1 {
+		port = args[1]
+	}
+
 	log.Println("Starting wol server: http://localhost:" + port)
 	addr := ":" + port
 	http.HandleFunc("/", indexView)
@@ -49,6 +55,7 @@ func checkPost(w http.ResponseWriter, r *http.Request) bool{
 type Device struct {
 	DeviceName string `json:"device_name"`
 	MacAddr string `json:"mac_address"`
+	BroadCastIP string `json:"broad_cast_ip"`
 }
 func handleAdd(w http.ResponseWriter, r *http.Request) {
 	//TODO
@@ -66,8 +73,9 @@ func handleWake(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "ParseForm() err: %v", err)
 			return
 		}
-		macAddr := r.FormValue("mac")
-		err1 := wol.WakeCmd([]string{macAddr})
+		macAddr := r.FormValue("macAddr")
+		broadCastIP := r.FormValue("broadCastIP")
+		err1 := wol.WakeCmd(macAddr, broadCastIP)
 		if err1 != nil {
 			w.Write([]byte("Send Error:" + err1.Error()))
 			return

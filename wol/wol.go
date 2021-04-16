@@ -8,9 +8,6 @@ import (
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const (
-	dbPath = "/.config/go-wol/bolt.db"
-)
 
 var (
 	// Define holders for the cli arguments we wish to parse.
@@ -56,21 +53,28 @@ func ipFromInterface(iface string) (*net.UDPAddr, error) {
 }
 
 // Run the wake command.
-func WakeCmd(args []string) error {
-	if len(args) <= 0 {
-		return errors.New("No mac address specified to wake command")
+func WakeCmd(macAddr string, broadCastIP string) error {
+	if broadCastIP == "" {
+		cliFlags.BroadcastIP = "255.255.255.255"
+	} else {
+		cliFlags.BroadcastIP = broadCastIP
 	}
 
 	// bcastInterface can be "eth0", "eth1", etc.. An empty string implies
 	// that we use the default interface when sending the UDP packet (nil).
 	bcastInterface := ""
-	macAddr := args[0]
+
+	if macAddr == "" {
+		return errors.New("No mac address specified to wake command")
+	}
 
 	// First we need to see if this macAddr is actually an alias, if it is:
 	// we set the eth interface based on the stored item, and set the macAddr
 	// based on the alias of the entry.
 
 	// Always use the interface specified in the command line, if it exists.
+	cliFlags.UDPPort = "9"
+
 	if cliFlags.BroadcastInterface != "" {
 		bcastInterface = cliFlags.BroadcastInterface
 	}

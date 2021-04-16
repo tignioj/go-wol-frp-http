@@ -1,8 +1,6 @@
 {
   "devices": [
-    { "device_name":"Device1", "mac_address": "AA:BB:CC:DD:EE:FF" },
-    { "device_name":"Device2", "mac_address": "AA:BB:CC:DD:EE:FF" },
-    { "device_name":"Device3", "mac_address": "AA:BB:CC:DD:EE:FF" },
-    { "device_name":"Device3", "mac_address": "AA:BB:CC:DD:EE:FF" }
+    { "device_name":"Device1", "mac_address": "AA:BB:CC:DD:EE:FF", "broad_cast_ip": "192.168.1.255" },
+    { "device_name":"Device1", "mac_address": "AA:BB:CC:DD:EE:FF", "broad_cast_ip": "192.168.1.255" }
   ]
 }

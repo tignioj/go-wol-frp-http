@@ -43,30 +43,30 @@
     <h1 align="center">Wake on lan</h1>
     <p>[INFO]<span id="info"></span></p>
     <span>Device name:</span> <input type="text" placeholder="Device Name"/>
+    <br/>
     <span>Mac address:</span> <input type="text" placeholder="Mac address"/>
+    <br/>
+    <span>BroadCast IP:</span> <input type="text" placeholder="BroadCast IP"/>
+    <br/>
     <button>BIND</button>
     <table>
         <tr>
             <th>Device Name</th>
             <th>Mac Address</th>
-            <td>
-                <button class="btn">WAKE ALL</button>
-            </td>
-            <td>
-                <button class="btn">DELETE ALL</button>
-            </td>
+            <th>BroadCast IP</th>
+            <td> <button class="btn">WAKE ALL</button> </td>
+            <td> <button class="btn">DELETE ALL</button> </td>
         </tr>
         {{range $device := .}}
             <tr>
-                <td>
-                    {{$device.DeviceName}}
-                </td>
+                <td> {{$device.DeviceName}} </td>
                 <td>{{$device.MacAddr}}</td>
+                <td>{{$device.BroadCastIP}}</td>
                 <td>
-                    <button onclick="wake({{$device.MacAddr}})" class="btn">WAKE</button>
+                    <button onclick="wake({{$device.MacAddr}}, {{$device.BroadCastIP}})" class="btn">WAKE</button>
                 </td>
                 <td>
-                    <button onclick="del({{$device.MacAddr}})" class="btn">DELETE</button>
+                    <button onclick="del({{$device.MacAddr}},  {{$device.BroadCastIP}})" class="btn">DELETE</button>
                 </td>
             </tr>
         {{end}}
@@ -79,16 +79,16 @@
         ele.innerText = new Date().toLocaleTimeString() + ":" + str
     }
 
-    function wake(macAddr) {
-        ajaxPost("/wake", "mac=" + macAddr)
+    function wake(macAddr, broadCastIP) {
+        ajaxPost("/wake", "macAddr=" + macAddr + "&broadCastIP=" + broadCastIP)
     }
 
-    function add(name, macAddr) {
-        ajaxPost("/add", "name=" + name + "&mac=" + macAddr)
+    function add(name, macAddr, broadCastIP) {
+        ajaxPost("/add", "name=" + name + "&macAddr=" + macAddr + "&broadCastIP" + broadCastIP)
     }
 
     function del(macAddr) {
-        ajaxPost("/del", "mac=" + macAddr)
+        ajaxPost("/del", "macAddr=" + macAddr)
     }
 
     function ajaxPost(url, data) {
